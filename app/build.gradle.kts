@@ -4,16 +4,17 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android.plugin)
+    alias(libs.plugins.google.services)
 }
 
 android {
     namespace = "com.example.owlgo"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.owlgo"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -55,11 +56,25 @@ dependencies {
     //Room
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+
+    implementation(libs.androidx.navigation.compose)
     ksp(libs.room.compiler)
 
     //hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    //firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    implementation(libs.play.services.auth)
+
+    //work manager
+    implementation(libs.work.runtime)
+    implementation(libs.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
