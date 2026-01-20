@@ -76,6 +76,12 @@ dependencies {
     implementation(libs.hilt.work)
     ksp(libs.androidx.hilt.compiler)
 
+    // heatmap + datetime
+    implementation(libs.heatmap)
+    implementation(libs.kotlinx.datetime)
+    // images
+    implementation(libs.coil.compose)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

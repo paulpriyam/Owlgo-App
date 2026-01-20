@@ -12,6 +12,9 @@ interface ProblemDao {
     @Query("SELECT * FROM problems WHERE nextRevisionDate <= :today ORDER BY nextRevisionDate")
     fun dueToday(today: Instant): Flow<List<ProblemEntity>>
 
+    @Query("SELECT * FROM problems WHERE lastSolvedDate >= :today ORDER BY lastSolvedDate DESC")
+    fun solvedToday(today: Instant): Flow<List<ProblemEntity>>
+
     @Query("SELECT * FROM problems ORDER BY lastSolvedDate DESC")
     fun all(): Flow<List<ProblemEntity>>
 

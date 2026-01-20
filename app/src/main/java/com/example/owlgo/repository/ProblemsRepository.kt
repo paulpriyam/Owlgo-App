@@ -29,6 +29,8 @@ class ProblemsRepository @Inject constructor(
     }
 
     fun dueTodayFlow(today: Instant): Flow<List<ProblemEntity>> = dao.dueToday(today)
+
+    fun solvedTodayFlow(today: Instant): Flow<List<ProblemEntity>> = dao.solvedToday(today)
     fun allFlow(): Flow<List<ProblemEntity>> = dao.all()
 
     suspend fun markSolvedAgain(slug: String) {

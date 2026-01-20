@@ -43,9 +43,17 @@ class MainActivity : ComponentActivity() {
                         startDestination = BottomNavigationItem.DashboardScreen.route,
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        composable(BottomNavigationItem.DashboardScreen.route) { DashboardScreen() }
-                        composable(BottomNavigationItem.AllProblemsScreen.route) { AllProblemsScreen() }
-                        composable(BottomNavigationItem.TodayScreen.route) { TodayScreen() }
+                        composable(BottomNavigationItem.DashboardScreen.route) {
+                            DashboardScreen(
+                                viewModel
+                            )
+                        }
+                        composable(BottomNavigationItem.AllProblemsScreen.route) {
+                            AllProblemsScreen(
+                                viewModel
+                            )
+                        }
+                        composable(BottomNavigationItem.TodayScreen.route) { TodayScreen(viewModel) }
                         composable(BottomNavigationItem.SettingsScreen.route) { SettingsScreen() }
 
                     }
