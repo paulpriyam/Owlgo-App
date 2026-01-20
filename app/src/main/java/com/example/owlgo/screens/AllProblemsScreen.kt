@@ -1,6 +1,7 @@
 package com.example.owlgo.screens
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -11,7 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.owlgo.viwmodel.ProblemsViewModel
+import com.example.owlgo.viwmodel.SessionViewModel
+import com.example.owlgo.viwmodel.AuthState
 import com.example.owlgo.model.ProblemEntity
 import java.time.Instant
 import java.time.ZoneId
@@ -21,10 +26,18 @@ import java.time.format.DateTimeFormatter
 fun AllProblemsScreen(
     viewModel: ProblemsViewModel
 ) {
-    val items by viewModel.allProblems.collectAsState()
-    val solved = items.filter { it.lastSolvedDate != null }
-    LazyColumn(Modifier.fillMaxSize()) {
-        items(solved) { p -> ProblemRow(p) }
+    val sessionVm: SessionViewModel = hiltViewModel()
+    val auth by sessionVm.state.collectAsState()
+    if (auth is AuthState.SignedOut) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text("Sign in to see All", style = MaterialTheme.typography.bodyMedium)
+        }
+    } else {
+        val items by viewModel.allProblems.collectAsState()
+        val solved = items.filter { it.lastSolvedDate != null }
+        LazyColumn(Modifier.fillMaxSize()) {
+            items(solved) { p -> ProblemRow(p) }
+        }
     }
 }
 

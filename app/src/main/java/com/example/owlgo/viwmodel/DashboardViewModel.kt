@@ -25,15 +25,27 @@ class DashboardViewModel @Inject constructor(
     private val start: LocalDate = today.plus(DatePeriod(days = -180))
 
     val heat = repository.allFlow().map { problems ->
-        val counts = problems.mapNotNull { p ->
+        val solvedCounts = problems.mapNotNull { p ->
             val d = p.lastSolvedDate?.atZone(ZoneId.systemDefault())?.toLocalDate()
+            d?.let { LocalDate(it.year, it.monthValue, it.dayOfMonth) }
+        }.groupingBy { it }.eachCount()
+        val dueCounts = problems.mapNotNull { p ->
+            val d = p.nextRevisionDate?.atZone(ZoneId.systemDefault())?.toLocalDate()
             d?.let { LocalDate(it.year, it.monthValue, it.dayOfMonth) }
         }.groupingBy { it }.eachCount()
 
         generateSequence(start) { d ->
             if (d < today) d.plus(DatePeriod(days = 1)) else null
         }.map { d ->
-            Heat<Unit>(date = d, value = (counts[d] ?: 0).toDouble())
+            val solved = (solvedCounts[d] ?: 0) > 0
+            val due = (dueCounts[d] ?: 0) > 0
+            val v = when {
+                solved && due -> 32.0
+                solved -> 90.0
+                due -> 8.0
+                else -> 0.0
+            }
+            Heat<Unit>(date = d, value = v)
         }.toList()
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 }

@@ -27,6 +27,10 @@ class ProblemsRepository @Inject constructor(
             CoroutineScope(Dispatchers.IO).launch { dao.upsertAll(items) }
         }
     }
+    fun stopSync() {
+        reg?.remove()
+        reg = null
+    }
 
     fun dueTodayFlow(today: Instant): Flow<List<ProblemEntity>> = dao.dueToday(today)
 
